@@ -7,7 +7,7 @@ async function request<T>(url: string, opts?: RequestInit): Promise<T> {
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
   return data as T;
-}}
+}
 
 export const api = {
   // Dashboard
@@ -90,15 +90,15 @@ export const api = {
   exportJobsCsv: (start: string, end: string, techId?: string): void => {
     const p = new URLSearchParams({ start, end });
     if (techId) p.set('tech_id', techId);
-    window.location.href = `${BASE}/export/jobs?${p}`;
+    window.location.href = `${API_BASE}/export/jobs?${p}`;
   },
 
   exportTechsCsv: (start: string, end: string): void => {
-    window.location.href = `${BASE}/export/techs?start=${start}&end=${end}`;
+    window.location.href = `${API_BASE}/export/techs?start=${start}&end=${end}`;
   },
 
   exportDailySummaryExcel: (date: string): void => {
-    window.location.href = `${BASE}/export/daily-summary?date=${encodeURIComponent(date)}`;
+    window.location.href = `${API_BASE}/export/daily-summary?date=${encodeURIComponent(date)}`;
   },
 
   queryAI: (question: string, period: Period): Promise<{ answer: string }> => {
