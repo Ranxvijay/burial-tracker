@@ -10,15 +10,3 @@ services:
       - key: NODE_ENV
         value: production
     healthCheckPath: /api/health
-
-  # Frontend Static Site
-  - type: static_site
-    name: burial-tracker-frontend
-    plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          name: burial-tracker-backend
-          property: url
