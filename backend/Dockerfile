@@ -8,7 +8,8 @@ RUN apt-get update \
 
 COPY package*.json ./
 
-RUN npm install
+# Ensure devDependencies (TypeScript types) are installed so `tsc` can run during image build.
+RUN npm install --include=dev
 
 COPY tsconfig.json ./
 COPY src ./src
