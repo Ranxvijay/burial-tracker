@@ -15,7 +15,7 @@ const PARSED_DIR = path.join(__dirname, '../../../uploads/parsed');
 
 const storage = multer.diskStorage({
   destination: TEMP_DIR,
-  filename: (_req, file, cb) => {
+  filename: (_req: Request, file: Express.Multer.File, cb: (err: Error | null, filename?: string) => void) => {
     const ext = path.extname(file.originalname);
     cb(null, `${uuidv4()}${ext}`);
   },
@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  fileFilter: (_req, file, cb) => {
+  fileFilter: (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     const ext = path.extname(file.originalname).toLowerCase();
     if (['.xlsx', '.xls', '.csv'].includes(ext)) cb(null, true);
     else cb(new Error('Only Excel (.xlsx, .xls) and CSV files are supported'));
