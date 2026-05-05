@@ -57,6 +57,13 @@ app.use('/api/techs', techsRouter);
 app.use('/api/ai', aiRouter);
 app.use('/api/export', exportRouter);
 
+// Generic error handler — ensure JSON errors for API clients
+app.use((err: any, _req: Request, res: Response, _next: any) => {
+  console.error('Unhandled error:', err && (err.stack || err.message || err));
+  const status = err && err.status && typeof err.status === 'number' ? err.status : 500;
+  res.status(status).json({ error: err && err.message ? err.message : 'Internal server error' });
+});
+
 app.listen(PORT, () => {
   console.log(`Backend  → http://localhost:${PORT}`);
   console.log(`Groq AI  → ${process.env.GROQ_API_KEY ? 'configured ✓' : 'not configured (add GROQ_API_KEY to .env)'}`);
