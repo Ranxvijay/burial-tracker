@@ -4,8 +4,17 @@ const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function request<T>(url: string, opts?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${url}`, opts);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || `Request failed: ${res.status}`);
+  const contentType = res.headers.get('content-type') || '';
+  let data: any = null;
+  if (contentType.includes('application/json')) {
+    data = await res.json();
+  } else {
+    // fallback to text for non-JSON responses (avoid JSON.parse errors)
+    const text = await res.text();
+    // try to parse JSON if looks like JSON
+    try { data = JSON.parse(text); } catch { data = text; }
+  }
+  if (!res.ok) throw new Error((data && data.error) ? data.error : (typeof data === 'string' ? data : `Request failed: ${res.status}`));
   return data as T;
 }
 
